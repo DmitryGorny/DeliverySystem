@@ -27,7 +27,7 @@ namespace Orders.Services.PaymentStrategies
                 new GetPaymentCardentials 
                 {
                     OrderId = order.Id,
-                    Amount = goods.Sum(s => s.Price),
+                    Amount = goods.Sum(s => s.Price * s.Quantity),
                     Currency = CurrencyEnum.RUB
                 });
 

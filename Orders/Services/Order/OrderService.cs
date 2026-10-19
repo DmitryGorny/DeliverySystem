@@ -26,7 +26,7 @@ namespace Orders.Services.Order
             var joinedGoods = response.RightJoin(goods, r => r.GoodId, g => g.GoodId, (r, g) => new
             {
                 GoodId = g.GoodId,
-                RequestedQuantity = g.Quntity,
+                RequestedQuantity = g.Quantity,
                 AvailableQuantity = r.AvailableQuantity,
                 RequestedPrice = g.Price,
                 ReleventPrice = r.ReleventPrice
