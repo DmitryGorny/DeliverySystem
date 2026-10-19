@@ -32,9 +32,11 @@ namespace Orders.Services.Order
                 ReleventPrice = r.ReleventPrice
             });
 
-            if (joinedGoods.Where(rg => rg.AvailableQuantity - rg.RequestedQuantity < 0).Any())
+            var unavailableQuantity = joinedGoods.Where(rg => rg.AvailableQuantity - rg.RequestedQuantity < 0);
+
+            if (unavailableQuantity.Any())
             {
-                throw new GoodOutOfStockException("Выбранный товар закончился", joinedGoods
+                throw new GoodOutOfStockException("Выбранный товар закончился", unavailableQuantity
                     .Select(rg => new OutOfStockDetails
                     {
                         GoodId = rg.GoodId,
@@ -43,9 +45,11 @@ namespace Orders.Services.Order
                     }).ToList());
             }
 
-            if (joinedGoods.Where(rg => rg.RequestedPrice != rg.ReleventPrice).Any())
+            var changedPrice = joinedGoods.Where(rg => rg.RequestedPrice != rg.ReleventPrice);
+
+            if (changedPrice.Any())
             {
-                throw new PriceChangedExcpetion("Цена на товар изменилась", joinedGoods
+                throw new PriceChangedExcpetion("Цена на товар изменилась", changedPrice
                     .Select(rg => new PriceChangedDetails
                     {
                         GoodId = rg.GoodId,
