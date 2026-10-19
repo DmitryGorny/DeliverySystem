@@ -1,6 +1,9 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Orders.Models
 {
+    [Table("orders")]
     public class Orders
     {
         public Guid Id { get; set; }

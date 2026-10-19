@@ -1,10 +1,13 @@
-﻿namespace Orders.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Orders.Models
 {
+    [Table("positions")]
     public class Positions
     {
         public int Id { get; set; }
         public int GoodId { get; set; }
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
         public int Quantity { get; set; }
     }
 }
