@@ -38,6 +38,68 @@ namespace Orders.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("order_status");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Status = "AwaitPayment"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Status = "DelayedPayment"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Status = "ToDelivery"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Status = "Delivered"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Status = "DeliveredWithoutPayment"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Status = "Done"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Status = "CancelledWithoutPayment"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Status = "CancellPaid"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Status = "CancellDelivered"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Status = "PaymentExpired"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Status = "PaymnetDeclined"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Status = "ReservationFailed"
+                        });
                 });
 
             modelBuilder.Entity("Orders.Models.Orders", b =>
@@ -61,7 +123,7 @@ namespace Orders.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderStatusId");
+                    b.HasIndex("OrderStatusId", "CreatedAt");
 
                     b.ToTable("orders");
                 });
