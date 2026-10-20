@@ -9,7 +9,6 @@ namespace Orders.Models
         public Guid Id { get; set; }
         public int UserId { get; set; }
 
-        public List<int> PositionsIds { get; set; }
         public List<Positions> Positions { get; set; }
 
         public int OrderStatusId { get; set; }
