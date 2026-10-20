@@ -7,5 +7,10 @@
         {
             GoodsIds = goodsIds;
         }
+
+        public List<int> GetGoods()
+        {
+            return GoodsIds;
+        }
     }
 }
