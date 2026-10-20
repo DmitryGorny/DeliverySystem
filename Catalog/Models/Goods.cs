@@ -1,5 +1,8 @@
-﻿namespace Catalog.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Catalog.Models
 {
+    [Table("goods")]
     public class Goods
     {
         public int Id { get; set; }
