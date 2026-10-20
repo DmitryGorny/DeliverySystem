@@ -26,7 +26,7 @@ namespace Catalog.Controllers
                     await _catalogService.CheckGoodsRelevance(goodIds));
             } catch (GoodsDontExistException ex)
             {
-                return Conflict(new {
+                return BadRequest(new {
                     Message = ex.Message,
                     Data = ex.GetGoods()
                 });
