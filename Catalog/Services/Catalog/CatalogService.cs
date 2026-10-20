@@ -27,7 +27,7 @@ namespace Catalog.Services.Catalog
             return goods.Select(g => new GoodsRelevanceResponse 
             {
                 GoodId = g.Id,
-                AvailableQuantity = g.Quantity,
+                AvailableQuantity = g.Quantity - g.Reserved,
                 ReleventPrice = g.Price
             }).ToList();
         }
