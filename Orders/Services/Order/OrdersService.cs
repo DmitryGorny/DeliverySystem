@@ -8,16 +8,17 @@ using Orders.Services.PaymentStrategy;
 
 namespace Orders.Services.Order
 {
-    public class OrderService : IOrderService
+    public class OrdersService : IOrdersService
     {
         private readonly ICatalogRequester _catalogRequester;
         private readonly IOrdersRepository _ordersRepository;
         private readonly IServiceProvider _serviceProvider;
-        public OrderService(ICatalogRequester catalogRequester, IServiceProvider provider)
+        public OrdersService(ICatalogRequester catalogRequester, IServiceProvider provider)
         {
             _catalogRequester = catalogRequester;
             _serviceProvider = provider;
         }
+
         public async Task<OrderCreatedResponse> Create(int ownerId, List<OrderGoodDto> goods, OrderType orderType)
         {
             
