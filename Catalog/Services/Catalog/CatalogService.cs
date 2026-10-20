@@ -19,9 +19,10 @@ namespace Catalog.Services.Catalog
                 
             if (goods.Count < goodsIds.Count)
             {
+                var foundGoodsId = goods.Select(g => g.Id).ToHashSet();
                 throw new GoodsDontExistException(
                     "Переданных id товаров не существуют",
-                    goods.Where(g => !goodsIds.Contains(g.Id)).Select(g => g.Id).ToList());
+                    goodsIds.Where(id => !foundGoodsId.Contains(id)).ToList());
             }
 
             return goods.Select(g => new GoodsRelevanceResponse 
