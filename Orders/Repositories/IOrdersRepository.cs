@@ -10,6 +10,7 @@ namespace Orders.Repositories
         public Task CreatePositions(List<OrderGoodDto> goodsId, Guid OrderId);
         public Task<Models.Orders> ChangeStatus(int orderId, OrderStatus status);
         public Task<OrderStatus> GetOrderStatus(OrderStatusEnum status);
+        public Task<int> SetPaymentExpired();
         public Task<Models.Orders> Get(int ownerId);
     }
 }
