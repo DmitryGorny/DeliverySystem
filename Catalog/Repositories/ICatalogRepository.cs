@@ -5,7 +5,7 @@ namespace Catalog.Repositories
 {
     public interface ICatalogRepository
     {
-        Task<Goods> GetGoodsByIds(List<int> goodsIds);
+        Task<List<Goods>> GetGoodsByIds(List<int> goodsIds);
         Task CreateReservation(List<ReservationGood> goods, Guid OrderId);
     }
 }
