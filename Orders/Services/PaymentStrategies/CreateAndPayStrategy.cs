@@ -11,9 +11,10 @@ namespace Orders.Services.PaymentStrategies
         private readonly IOrdersRepository _ordersRepository;
         private readonly IPaymentRequester _paymentRequester;
 
-        public CreateAndPayStrategy(IOrdersRepository ordersRepository)
+        public CreateAndPayStrategy(IOrdersRepository ordersRepository, IPaymentRequester paymentRequester)
         {
             _ordersRepository = ordersRepository;
+            _paymentRequester = paymentRequester;
         }
         public async Task<OrderCreatedResponse> CreateOrder(int ownerId, List<OrderGoodDto> goods)
         {
@@ -27,7 +28,7 @@ namespace Orders.Services.PaymentStrategies
                 new GetPaymentCardentials 
                 {
                     OrderId = order.Id,
-                    Amount = goods.Sum(s => s.Price),
+                    Amount = goods.Sum(s => s.Price * s.Quantity),
                     Currency = CurrencyEnum.RUB
                 });
 

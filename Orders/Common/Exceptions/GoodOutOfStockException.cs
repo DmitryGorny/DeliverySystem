@@ -4,12 +4,12 @@ namespace Orders.Common.Exceptions
 {
     public class GoodOutOfStockException : Exception
     {
-        private List<OutOfStockDetails> Details { get; }
+        public List<OutOfStockDetails> Goods { get; private set; }
         public GoodOutOfStockException(
             string message,
             List<OutOfStockDetails> details) : base(message)
         {
-            Details = details;
+            Goods = details;
         }
     }
 }

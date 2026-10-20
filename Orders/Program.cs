@@ -1,3 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Orders.DB;
+using Orders.Models;
+using Orders.Repositories;
+using Orders.Services.Catalog;
+using Orders.Services.Expiration;
+using Orders.Services.Order;
+using Orders.Services.PaymentStrategies;
+using Orders.Services.PaymentStrategy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +15,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+
+builder.Services.AddKeyedScoped<IPaymentStrategy, CreateAndPayStrategy>(OrderType.CreateAndPay);
+builder.Services.AddKeyedScoped<IPaymentStrategy, DelayedPaymentStrategy>(OrderType.DelayedPayment);
+
+builder.Services.AddHttpClient<ICatalogRequester, CatalogRequester>(c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["Services:Catalog"]!);
+    c.Timeout = TimeSpan.FromSeconds(5);
+});
+
+builder.Services.AddEntityFrameworkNpgsql()
+    .AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings:Postgres"]));
+
+builder.Services.AddHostedService<ExpirationCheck>();
 
 var app = builder.Build();
 

@@ -3,7 +3,7 @@
     public record OrderGoodDto()
     {
         public int GoodId { get; set; }
-        public int Quntity { get; set; }
+        public int Quantity { get; set; }
         public decimal Price { get; set; }
     }
 }
