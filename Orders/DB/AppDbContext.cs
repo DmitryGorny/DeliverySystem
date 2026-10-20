@@ -8,8 +8,8 @@ namespace Orders.DB
         public AppDbContext(DbContextOptions options) : base(options)
         { }
 
-        DbSet<Models.Orders> Orders { get; set; }
-        DbSet<OrderStatus> OrderStatuses { get; set; }
-        DbSet<Positions> Positions { get; set; }
+        public DbSet<Models.Orders> Orders { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<Positions> Positions { get; set; }
     }
 }
