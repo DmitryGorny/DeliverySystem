@@ -34,16 +34,16 @@ namespace Orders.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<int> SetPaymentExpired()
+        public async Task<int> SetPaymentExpired(CancellationToken ct = default)
         {
             var status = await _db.OrderStatuses
                 .Where(os => os.Status.Equals(OrderStatusEnum.PaymentExpired.ToString()))
-                .FirstAsync(); //Не может быть пустым, т.к. статусы из констант обзяаны быть в таблице
+                .FirstAsync(ct); //Не может быть пустым, т.к. статусы из констант обзяаны быть в таблице
 
             return await _db.Orders
                 .Include(o => o.OrderStatus)
                 .Where(o => o.OrderStatus.Status.Equals(OrderStatusEnum.AwaitPayment.ToString()))
-                .ExecuteUpdateAsync(setter => setter.SetProperty(o => o.OrderStatusId, status.Id));
+                .ExecuteUpdateAsync(setter => setter.SetProperty(o => o.OrderStatusId, status.Id), ct);
         }
 
         Task<OrderStatus> IOrdersRepository.GetOrderStatus(OrderStatusEnum status)
