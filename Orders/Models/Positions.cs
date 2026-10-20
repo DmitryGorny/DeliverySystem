@@ -1,6 +1,4 @@
-﻿using Orders.Common.Constants;
-using StackExchange.Redis;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Orders.Models
 {
