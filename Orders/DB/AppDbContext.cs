@@ -5,7 +5,7 @@ namespace Orders.DB
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
 
         public DbSet<Models.Orders> Orders { get; set; }

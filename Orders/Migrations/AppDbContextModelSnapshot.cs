@@ -80,15 +80,15 @@ namespace Orders.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("OrdersId")
-                        .HasColumnType("uuid");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrdersId");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("positions");
                 });
@@ -106,9 +106,13 @@ namespace Orders.Migrations
 
             modelBuilder.Entity("Orders.Models.Positions", b =>
                 {
-                    b.HasOne("Orders.Models.Orders", null)
+                    b.HasOne("Orders.Models.Orders", "Order")
                         .WithMany("Positions")
-                        .HasForeignKey("OrdersId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Orders.Models.Orders", b =>
