@@ -22,7 +22,7 @@ namespace Orders.Services.Order
         public async Task<OrderCreatedResponse> Create(int ownerId, List<OrderGoodDto> goods, OrderType orderType)
         {
             
-            var response = await _catalogRequester.GetGoodsQuantity(goods.Select(g => g.GoodId));
+            var response = await _catalogRequester.CheckGoodsRelevance(goods.Select(g => g.GoodId));
 
             var joinedGoods = response.RightJoin(goods, r => r.GoodId, g => g.GoodId, (r, g) => new
             {

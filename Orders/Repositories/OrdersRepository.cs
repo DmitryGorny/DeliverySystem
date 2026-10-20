@@ -43,7 +43,7 @@ namespace Orders.Repositories
             return await _db.Orders
                 .Include(o => o.OrderStatus)
                 .Where(o => o.OrderStatus.Status.Equals(OrderStatusEnum.AwaitPayment.ToString()) 
-                && o.CreatedAt <= DateTime.UtcNow.AddMinutes(-15))
+                    && o.CreatedAt <= DateTime.UtcNow.AddMinutes(-15))
                 .ExecuteUpdateAsync(setter => setter.SetProperty(o => o.OrderStatusId, status.Id), ct);
         }
 
