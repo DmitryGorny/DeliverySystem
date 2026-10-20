@@ -1,3 +1,7 @@
+using Catalog.DB;
+using Catalog.Repositories;
+using Catalog.Services.Catalog;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
+builder.Services.AddScoped<ICatalogService, CatalogService>();
+
+builder.Services.AddNpgsql<AppDbContext>(
+    builder.Configuration["ConnectionStrings:Postgres"]);
 
 var app = builder.Build();
 
