@@ -8,6 +8,7 @@ namespace Orders.Dtos
         public int ownerId { get; set; }
 
         [Required]
+        [MinLength(1)]
         public List<OrderGoodDto> Goods { get; set; }
 
         [Required]
