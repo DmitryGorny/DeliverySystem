@@ -14,12 +14,17 @@ namespace Orders.Repositories
         {
             _db = db;
         }
-        public Task<Models.Orders> ChangeStatus(int orderId, OrderStatus status)
+        public Task<Models.Orders> ChangeStatus(
+            int orderId, OrderStatus status, 
+            CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Models.Orders> CreateOrder(int ownerId, OrderStatus orderStatus)
+        public async Task<Models.Orders> CreateOrder(
+            int ownerId, 
+            OrderStatus orderStatus, 
+            CancellationToken ct = default)
         {
             var order = new Models.Orders
             {
@@ -29,13 +34,16 @@ namespace Orders.Repositories
                 OrderStatusId = orderStatus.Id,
                 UserId = ownerId
             };
-            await _db.Orders.AddAsync(order);
-            await _db.SaveChangesAsync();
+            await _db.Orders.AddAsync(order, ct);
+            await _db.SaveChangesAsync(ct);
 
             return order;
         }
 
-        public async Task CreatePositions(List<OrderGoodDto> goodsId, Guid OrderId)
+        public async Task CreatePositions(
+            List<OrderGoodDto> goodsId, 
+            Guid OrderId,
+            CancellationToken ct = default)
         {
             var w = goodsId.Select(async g =>
             {
@@ -44,14 +52,14 @@ namespace Orders.Repositories
                     OrderId = OrderId, 
                     Price = g.Price,
                     Quantity = g.Quantity
-                });
+                }, ct);
             });
             await Task.WhenAll(w);
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(ct);
         }
 
-        public Task<Models.Orders> Get(int ownerId)
+        public Task<Models.Orders> Get(int ownerId, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }
@@ -69,11 +77,13 @@ namespace Orders.Repositories
                 .ExecuteUpdateAsync(setter => setter.SetProperty(o => o.OrderStatusId, status.Id), ct);
         }
 
-        public async Task<OrderStatus> GetOrderStatus(OrderStatusEnum status)
+        public async Task<OrderStatus> GetOrderStatus(
+            OrderStatusEnum status, 
+            CancellationToken ct = default)
         {
             return await _db.OrderStatuses
                 .Where(os => os.Status.Equals(status.ToString()))
-                .FirstAsync();
+                .FirstAsync(ct);
         }
     }
 }
