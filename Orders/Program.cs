@@ -7,6 +7,7 @@ using Orders.Services.Expiration;
 using Orders.Services.Order;
 using Orders.Services.PaymentStrategies;
 using Orders.Services.PaymentStrategy;
+using Orders.Services.PaymentSystem;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+
+builder.Services.AddScoped<IPaymentRequester, PaymentRequester>();
 
 builder.Services.AddKeyedScoped<IPaymentStrategy, CreateAndPayStrategy>(OrderType.CreateAndPay);
 builder.Services.AddKeyedScoped<IPaymentStrategy, DelayedPaymentStrategy>(OrderType.DelayedPayment);
@@ -41,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+;
 
 app.UseAuthorization();
 
