@@ -19,14 +19,36 @@ namespace Orders.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Models.Orders> CreateOrder(int ownerId, OrderStatus orderStatus)
+        public async Task<Models.Orders> CreateOrder(int ownerId, OrderStatus orderStatus)
         {
-            throw new NotImplementedException();
+            var order = new Models.Orders
+            {
+                Id = Guid.NewGuid(),
+                CreatedAt = DateTime.UtcNow,
+                OrderStatus = orderStatus,
+                OrderStatusId = orderStatus.Id,
+                UserId = ownerId
+            };
+            await _db.Orders.AddAsync(order);
+            await _db.SaveChangesAsync();
+
+            return order;
         }
 
-        public Task CreatePositions(List<OrderGoodDto> goodsId, Guid OrderId)
+        public async Task CreatePositions(List<OrderGoodDto> goodsId, Guid OrderId)
         {
-            throw new NotImplementedException();
+            var w = goodsId.Select(async g =>
+            {
+                await _db.Positions.AddAsync(new Positions { 
+                    GoodId = g.GoodId,
+                    OrderId = OrderId, 
+                    Price = g.Price,
+                    Quantity = g.Quantity
+                });
+            });
+            await Task.WhenAll(w);
+
+            await _db.SaveChangesAsync();
         }
 
         public Task<Models.Orders> Get(int ownerId)
@@ -47,9 +69,11 @@ namespace Orders.Repositories
                 .ExecuteUpdateAsync(setter => setter.SetProperty(o => o.OrderStatusId, status.Id), ct);
         }
 
-        Task<OrderStatus> IOrdersRepository.GetOrderStatus(OrderStatusEnum status)
+        public async Task<OrderStatus> GetOrderStatus(OrderStatusEnum status)
         {
-            throw new NotImplementedException();
+            return await _db.OrderStatuses
+                .Where(os => os.Status.Equals(status.ToString()))
+                .FirstAsync();
         }
     }
 }
