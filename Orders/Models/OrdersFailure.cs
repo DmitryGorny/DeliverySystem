@@ -8,6 +8,7 @@ namespace Orders.Models
         public FailureType FailureType { get; set; }
         public Guid OrderId { get; set; }
         public Orders Order { get; set; }
+        public string Reason { get; set; }
         public RefundStatuses RefundStatus { get; set; }
     }
 }
