@@ -13,16 +13,29 @@ namespace Catalog.Repositories
         {
             _db = db;
         }
-        public Task CreateReservation(List<ReservationGood> goods, Guid OrderId)
+        public async Task CreateReservation(List<GoodToReserve> goods, Guid orderId, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var tasks = goods.Select(async g =>
+            {
+                var resrvation = new Reservations
+                {
+                    OrderId = orderId,
+                    GoodId = g.GoodId,
+                    ReservationNumber = g.Quantity,
+                };
+
+                return await _db.Reservations.AddAsync(resrvation, ct);
+            });
+
+            await Task.WhenAll(tasks);
+            await _db.SaveChangesAsync(ct);
         }
 
-        public async Task<List<Goods>> GetGoodsByIds(List<int> goodsIds)
+        public async Task<List<Goods>> GetGoodsByIds(List<int> goodsIds, CancellationToken ct = default)
         {
             return await _db.Goods
                 .Where(g => goodsIds.Contains(g.Id))
-                .ToListAsync();
+                .ToListAsync(ct);
         }
     }
 }
