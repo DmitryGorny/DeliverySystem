@@ -20,7 +20,7 @@ namespace Orders.Repositories
             OrderStatusEnum status, 
             CancellationToken ct = default)
         {
-            var orderStatus = await _db.OrderStatuses.FirstAsync(os => os.Status.Equals(status.ToString()));
+            var orderStatus = await _db.OrderStatuses.FirstAsync(os => os.Status.Equals(status.ToString()), ct);
 
             await _db.Orders
                 .Where(o => o.Id == orderId)

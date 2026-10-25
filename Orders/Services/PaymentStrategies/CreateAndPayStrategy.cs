@@ -16,13 +16,16 @@ namespace Orders.Services.PaymentStrategies
             _ordersRepository = ordersRepository;
             _paymentRequester = paymentRequester;
         }
-        public async Task<OrderCreatedResponse> CreateOrder(int ownerId, List<OrderGoodDto> goods)
+        public async Task<OrderCreatedResponse> CreateOrder(
+            int ownerId, 
+            List<OrderGoodDto> goods, 
+            CancellationToken ct = default)
         {
-            var status = await _ordersRepository.GetOrderStatus(OrderStatusEnum.AwaitPayment);
+            var status = await _ordersRepository.GetOrderStatus(OrderStatusEnum.AwaitPayment, ct);
 
-            var order = await _ordersRepository.CreateOrder(ownerId, status);
+            var order = await _ordersRepository.CreateOrder(ownerId, status, ct);
 
-            await _ordersRepository.CreatePositions(goods, order.Id);
+            await _ordersRepository.CreatePositions(goods, order.Id, ct);
 
             var cardentials = await _paymentRequester.GetPaymentCardentials(
                 new GetPaymentCardentials 
@@ -30,7 +33,7 @@ namespace Orders.Services.PaymentStrategies
                     OrderId = order.Id,
                     Amount = goods.Sum(s => s.Price * s.Quantity),
                     Currency = CurrencyEnum.RUB
-                });
+                }, ct);
 
             return new OrderCreatedResponse 
             {

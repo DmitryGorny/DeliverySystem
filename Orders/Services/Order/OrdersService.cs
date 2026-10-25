@@ -20,10 +20,14 @@ namespace Orders.Services.Order
             _serviceProvider = provider;
         }
 
-        public async Task<OrderCreatedResponse> Create(int ownerId, List<OrderGoodDto> goods, OrderType orderType)
+        public async Task<OrderCreatedResponse> Create(
+            int ownerId, 
+            List<OrderGoodDto> goods, 
+            OrderType orderType,
+            CancellationToken ct = default)
         {
             
-            var response = await _catalogRequester.CheckGoodsRelevance(goods.Select(g => g.GoodId));
+            var response = await _catalogRequester.CheckGoodsRelevance(goods.Select(g => g.GoodId), ct);
 
             var joinedGoods = response.RightJoin(goods, r => r.GoodId, g => g.GoodId, (r, g) => new
             {
@@ -62,12 +66,12 @@ namespace Orders.Services.Order
 
             var strategy = GetStrategy(orderType);
 
-            return await strategy.CreateOrder(ownerId, goods);
+            return await strategy.CreateOrder(ownerId, goods, ct);
         }
 
         public async Task Reserve(Guid orderId, CancellationToken ct = default)
         {
-            var order = await _ordersRepository.GetByOrderId(orderId);
+            var order = await _ordersRepository.GetByOrderId(orderId, ct);
 
             if (order == null)
                 return; //TODO: подумать что тут делать
@@ -84,7 +88,7 @@ namespace Orders.Services.Order
                             GoodId = p.GoodId,
                             Quantity = p.Quantity
                         }).ToList()
-                    });
+                    }, ct);
                 return;
             } catch (GoodsDontExistException ex)
             {
@@ -111,7 +115,7 @@ namespace Orders.Services.Order
                     ct);
             }
 
-            await _ordersRepository.ChangeStatus(orderId, OrderStatusEnum.ReservationFailed);
+            await _ordersRepository.ChangeStatus(orderId, OrderStatusEnum.ReservationFailed, ct);
         }
 
         private IPaymentStrategy GetStrategy(OrderType orderType)
