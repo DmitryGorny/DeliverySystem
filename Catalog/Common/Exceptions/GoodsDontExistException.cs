@@ -2,15 +2,10 @@
 {
     public class GoodsDontExistException : Exception
     {
-        private readonly List<int> GoodsIds;
+        public List<int> GoodsIds { get; private set; }
         public GoodsDontExistException(string message, List<int> goodsIds) : base(message) 
         {
             GoodsIds = goodsIds;
-        }
-
-        public List<int> GetGoods()
-        {
-            return GoodsIds;
         }
     }
 }

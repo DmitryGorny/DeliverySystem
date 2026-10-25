@@ -1,9 +1,9 @@
 ﻿namespace Catalog.Dtos
 {
-    public class ReservationGood
+    public class GoodToReserve
     {
         public int GoodId { get; set; }
-        public int Quality { get; set; }
+        public int Quantity { get; set; }
         public decimal Price { get; set; }
     }
 }
