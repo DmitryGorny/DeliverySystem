@@ -3,6 +3,7 @@ using Orders.Common.Constants;
 using Orders.DB;
 using Orders.Dtos;
 using Orders.Models;
+using Orders.Models.enums;
 
 namespace Orders.Repositories
 {
@@ -14,11 +15,16 @@ namespace Orders.Repositories
         {
             _db = db;
         }
-        public Task<Models.Orders> ChangeStatus(
-            int orderId, OrderStatus status, 
+        public async Task ChangeStatus(
+            Guid orderId, 
+            OrderStatusEnum status, 
             CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var orderStatus = await _db.OrderStatuses.FirstAsync(os => os.Status.Equals(status.ToString()));
+
+            await _db.Orders
+                .Where(o => o.Id == orderId)
+                .ExecuteUpdateAsync(setter => setter.SetProperty(o => o.OrderStatusId, orderStatus.Id), ct);
         }
 
         public async Task<Models.Orders> CreateOrder(
@@ -84,6 +90,43 @@ namespace Orders.Repositories
             return await _db.OrderStatuses
                 .Where(os => os.Status.Equals(status.ToString()))
                 .FirstAsync(ct);
+        }
+
+        public async Task<Models.Orders?> GetByOrderId(Guid orderId, CancellationToken ct = default)
+        {
+            return await _db.Orders
+                .Include(o => o.Positions)
+                .FirstAsync(o => o.Id == orderId, ct);
+        }
+
+        public async Task CreateOrderFailure(
+            Models.Orders order, 
+            FailureType type, 
+            List<int> positionIds, 
+            CancellationToken ct = default)
+        {
+            var ordersFailure = new OrdersFailure
+            {
+                OrderId = order.Id,
+                FailureType = type,
+                RefundStatus = RefundStatuses.Pending
+            };
+
+            await _db.OrdersFailures.AddAsync(ordersFailure, ct);
+            await _db.SaveChangesAsync(ct);
+
+            var tasks = order.Positions
+                .Where(p => positionIds.Contains(p.Id))
+                .Select(async p => {
+                   await _db.FailurePositions.AddAsync(new FailurePositions
+                   {
+                        FailureId = ordersFailure.Id,
+                        PositionId = p.Id
+                   }, ct);
+                });
+
+            await Task.WhenAll(tasks);
+            await _db.SaveChangesAsync(ct);
         }
     }
 }
