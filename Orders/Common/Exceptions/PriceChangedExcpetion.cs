@@ -4,7 +4,7 @@ namespace Orders.Common.Exceptions
 {
     public class PriceChangedExcpetion : Exception
     {
-        private List<PriceChangedDetails> Details { get; }
+        public List<PriceChangedDetails> Details { get; private set; }
         public PriceChangedExcpetion(string message, List<PriceChangedDetails> details) : base(message)
         {
             Details = details;

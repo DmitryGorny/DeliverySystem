@@ -1,4 +1,4 @@
-﻿using Orders.Models;
+﻿using Orders.Models.enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Orders.Dtos
