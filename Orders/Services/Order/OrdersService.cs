@@ -1,7 +1,8 @@
-﻿using Orders.Common.Exceptions;
+﻿using Orders.Common.Constants;
+using Orders.Common.Exceptions;
 using Orders.Common.Exceptions.ExcpetionsDtos;
 using Orders.Dtos;
-using Orders.Models;
+using Orders.Models.enums;
 using Orders.Repositories;
 using Orders.Services.Catalog;
 using Orders.Services.PaymentStrategy;
@@ -62,6 +63,55 @@ namespace Orders.Services.Order
             var strategy = GetStrategy(orderType);
 
             return await strategy.CreateOrder(ownerId, goods);
+        }
+
+        public async Task Reserve(Guid orderId, CancellationToken ct = default)
+        {
+            var order = await _ordersRepository.GetByOrderId(orderId);
+
+            if (order == null)
+                return; //TODO: подумать что тут делать
+
+            try
+            {
+                await _catalogRequester.ReserveGoods(new GoodsReservationBody
+                {
+                    OrderId = orderId,
+                    GoodsToReserve = order.Positions
+                    .Select(p =>
+                        new GoodToReserve
+                        {
+                            GoodId = p.GoodId,
+                            Quantity = p.Quantity
+                        }).ToList()
+                    });
+                return;
+            } catch (GoodsDontExistException ex)
+            {
+                await _ordersRepository.CreateOrderFailure(
+                    order, 
+                    FailureType.GoodsDontExist, 
+                    ex.Goods,
+                    ct);
+            }
+            catch (PriceChangedExcpetion ex)
+            {
+                await _ordersRepository.CreateOrderFailure(
+                    order,
+                    FailureType.PriceChanged,
+                    ex.Details.Select(d => d.GoodId).ToList(),
+                    ct);
+            }
+            catch (GoodOutOfStockException ex)
+            {
+                await _ordersRepository.CreateOrderFailure(
+                    order,
+                    FailureType.OutOfStock,
+                    ex.Goods.Select(d => d.GoodId).ToList(),
+                    ct);
+            }
+
+            await _ordersRepository.ChangeStatus(orderId, OrderStatusEnum.ReservationFailed);
         }
 
         private IPaymentStrategy GetStrategy(OrderType orderType)
