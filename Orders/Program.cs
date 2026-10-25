@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Orders.DB;
-using Orders.Models;
+using Orders.Models.enums;
 using Orders.Repositories;
 using Orders.Services.Catalog;
 using Orders.Services.Expiration;
