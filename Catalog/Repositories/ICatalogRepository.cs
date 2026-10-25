@@ -5,7 +5,7 @@ namespace Catalog.Repositories
 {
     public interface ICatalogRepository
     {
-        Task<List<Goods>> GetGoodsByIds(List<int> goodsIds);
-        Task CreateReservation(List<ReservationGood> goods, Guid OrderId);
+        Task<List<Goods>> GetGoodsByIds(List<int> goodsIds, CancellationToken ct = default);
+        Task CreateReservation(List<GoodToReserve> goods, Guid orderId, CancellationToken ct = default);
     }
 }
