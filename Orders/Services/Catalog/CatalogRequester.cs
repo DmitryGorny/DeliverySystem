@@ -57,10 +57,14 @@ namespace Orders.Services.Catalog
                 var responseParsed = await response.Content.ReadFromJsonAsync<ReservationExceptionResponse>(ct);
 
                 if (responseParsed!.Type == FailureType.OutOfStock)
-                    throw new GoodOutOfStockException(responseParsed.Message, responseParsed.OutOfStock!);
+                    throw new GoodOutOfStockException(
+                        responseParsed.Message, 
+                        responseParsed.Data.Deserialize<List<OutOfStockDetails>>()!);
 
                 if (responseParsed!.Type == FailureType.PriceChanged)
-                    throw new PriceChangedExcpetion(responseParsed.Message, responseParsed.PriceChanged!);
+                    throw new PriceChangedExcpetion(
+                        responseParsed.Message,
+                        responseParsed.Data.Deserialize<List<PriceChangedDetails>>()!);
             }
 
             response.EnsureSuccessStatusCode();
@@ -76,7 +80,6 @@ namespace Orders.Services.Catalog
     {
         public string Message { get; set; }
         public FailureType Type { get; set; }
-        public List<OutOfStockDetails>? OutOfStock { get; set; }
-        public List<PriceChangedDetails>? PriceChanged { get; set; }
+        public JsonElement Data { get; set; }
     }
 }
