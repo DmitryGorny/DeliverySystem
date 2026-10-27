@@ -35,18 +35,21 @@ builder.Services.AddOpenIddict()
         options.UseAspNetCore()
                .EnableTokenEndpointPassthrough()
                .DisableTransportSecurityRequirement();
+
+        options.DisableAccessTokenEncryption();
     });
 
 
 var app = builder.Build();
 
-using var scope = app.Services.CreateAsyncScope();
+await using(var scope = app.Services.CreateAsyncScope()) {
 
-var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
+    var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
 
-var ct = app.Lifetime.ApplicationStopping;
+    var ct = app.Lifetime.ApplicationStopping;
 
-await authService.SeedServicesCardentials(ct);
+    await authService.SeedServicesCardentials(ct);
+}
 
 // Configure the HTTP request pipeline.
 
