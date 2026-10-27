@@ -1,4 +1,5 @@
 <Solution>
-  <Project Path="Catalog/Catalog.csproj" />
-  <Project Path="Orders/Orders.csproj" />
+      <Project Path="Authorization/Authorization.csproj" />
+     <Project Path="Catalog/Catalog.csproj" />
+     <Project Path="Orders/Orders.csproj" />
 </Solution>
