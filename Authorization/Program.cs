@@ -1,6 +1,7 @@
 using Authorization.DB;
 using Authorization.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,21 +23,21 @@ builder.Services.AddOpenIddict()
     });
 
 builder.Services.AddOpenIddict()
-
     .AddServer(options =>
     {
         options.SetTokenEndpointUris("api/Auth/ServicesAuth");
 
         options.AllowClientCredentialsFlow();
 
-        options.AddDevelopmentEncryptionCertificate()
-               .AddDevelopmentSigningCertificate();
+        options.AddDevelopmentSigningCertificate();
 
         options.UseAspNetCore()
                .EnableTokenEndpointPassthrough()
                .DisableTransportSecurityRequirement();
 
-        options.DisableAccessTokenEncryption();
+        options.AddEncryptionKey(new SymmetricSecurityKey(
+             Convert.FromBase64String("DRjd/GnduI3Efzen9V9BvbNUfc/VKgXltV7Kbk9sMkY=")));
+
     });
 
 
