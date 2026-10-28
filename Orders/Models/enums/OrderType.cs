@@ -1,4 +1,4 @@
-﻿namespace Orders.Models
+﻿namespace Orders.Models.enums
 {
     public enum OrderType
     {

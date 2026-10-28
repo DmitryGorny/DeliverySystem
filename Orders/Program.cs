@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Client;
 using Orders.DB;
-using Orders.Models;
+using Orders.Models.enums;
 using Orders.Repositories;
 using Orders.Services.Auth.AuthHttpHandler;
 using Orders.Services.Auth.AuthRequester;

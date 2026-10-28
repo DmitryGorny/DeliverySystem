@@ -4,6 +4,6 @@ namespace Orders.Services.PaymentStrategy
 {
     public interface IPaymentStrategy
     {
-        Task<OrderCreatedResponse> CreateOrder(int ownerId, List<OrderGoodDto> goods);
+        Task<OrderCreatedResponse> CreateOrder(int ownerId, List<OrderGoodDto> goods, CancellationToken ct = default);
     }
 }

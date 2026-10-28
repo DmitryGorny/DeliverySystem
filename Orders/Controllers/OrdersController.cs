@@ -18,12 +18,14 @@ namespace Orders.Controllers
 
         [HttpPost]
         [Route("CreateOrder")]
-        public async Task<ActionResult<OrderCreatedResponse>> CreateOrder([FromBody] CreateOrderBody body)
+        public async Task<ActionResult<OrderCreatedResponse>> CreateOrder(
+            [FromBody] CreateOrderBody body,
+            CancellationToken ct = default)
             //Временно ownerId в Body, потом будет браться из клеймов
         {
             try
             {
-                return await _ordersService.Create(body.ownerId, body.Goods, body.OrderType);
+                return await _ordersService.Create(body.ownerId, body.Goods, body.OrderType, ct);
             } catch (GoodOutOfStockException ex)
             {
                 return Conflict(new {

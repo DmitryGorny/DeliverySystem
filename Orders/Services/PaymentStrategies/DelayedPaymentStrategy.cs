@@ -14,13 +14,16 @@ namespace Orders.Services.PaymentStrategies
             _ordersRepository = ordersRepository;
         }
 
-        public async Task<OrderCreatedResponse> CreateOrder(int ownerId, List<OrderGoodDto> goods)
+        public async Task<OrderCreatedResponse> CreateOrder(
+            int ownerId, 
+            List<OrderGoodDto> goods, 
+            CancellationToken ct = default)
         {
-            var status = await _ordersRepository.GetOrderStatus(OrderStatusEnum.DelayedPayment);
+            var status = await _ordersRepository.GetOrderStatus(OrderStatusEnum.DelayedPayment, ct);
 
-            var order = await _ordersRepository.CreateOrder(ownerId, status);
+            var order = await _ordersRepository.CreateOrder(ownerId, status, ct);
 
-            await _ordersRepository.CreatePositions(goods, order.Id);
+            await _ordersRepository.CreatePositions(goods, order.Id, ct);
 
             return new OrderCreatedResponse {
                 OrderId = order.Id,

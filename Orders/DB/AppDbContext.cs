@@ -13,6 +13,8 @@ namespace Orders.DB
         public DbSet<Models.Orders> Orders { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Positions> Positions { get; set; }
+        public DbSet<OrdersFailure> OrdersFailures { get; set; }
+        public DbSet<FailurePositions> FailurePositions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
