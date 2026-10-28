@@ -8,6 +8,7 @@ using OpenIddict.Validation.AspNetCore;
 
 namespace Catalog.Controllers
 {
+    [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class CatalogController : ControllerBase
