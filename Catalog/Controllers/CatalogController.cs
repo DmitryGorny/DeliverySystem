@@ -1,7 +1,9 @@
 ﻿using Catalog.Common.Exceptions;
 using Catalog.Dtos;
 using Catalog.Services.Catalog;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenIddict.Validation.AspNetCore;
 
 namespace Catalog.Controllers
 {
