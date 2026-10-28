@@ -4,7 +4,7 @@ namespace Orders.Dtos
 {
     public class AuthCardentials
     {
-        [JsonPropertyName("access-token")]
+        [JsonPropertyName("access_token")]
         public string AccessToken { get; set; }
         [JsonPropertyName("token_type")]
         public string TokenType { get; set; }
