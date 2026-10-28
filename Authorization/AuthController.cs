@@ -1,11 +1,8 @@
 ﻿using Authorization.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
-using System.Security.Claims;
-using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Authorization
 {
