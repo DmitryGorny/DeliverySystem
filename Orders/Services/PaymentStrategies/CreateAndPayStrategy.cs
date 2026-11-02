@@ -28,7 +28,7 @@ namespace Orders.Services.PaymentStrategies
             await _ordersRepository.CreatePositions(goods, order.Id, ct);
 
             var cardentials = await _paymentRequester.GetPaymentCardentials(
-                new GetPaymentCardentials 
+                new RequestPaymentCardentialsBody 
                 {
                     OrderId = order.Id,
                     Amount = goods.Sum(s => s.Price * s.Quantity),
