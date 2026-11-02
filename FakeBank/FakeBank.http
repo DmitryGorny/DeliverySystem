@@ -1,0 +1,36 @@
+@Bank = http://localhost:5100
+@ApiKey = test_api_key
+
+### Создать платёж
+POST {{Bank}}/v1/payments
+Authorization: Bearer {{ApiKey}}
+Idempotence-Key: 7d3e1b9a-4c2f-4a8e-9b61-0f5c2d8e1a33
+Content-Type: application/json
+
+{
+  "amount": 12990.00,
+  "currency": "RUB",
+  "orderId": "7d3e1b9a-4c2f-4a8e-9b61-0f5c2d8e1a33",
+  "description": "Заказ 7d3e1b9a"
+}
+
+### Получить платёж (подставь id из ответа)
+GET {{Bank}}/v1/payments/{{paymentId}}
+Authorization: Bearer {{ApiKey}}
+
+### Покупатель оплатил
+POST {{Bank}}/sandbox/payments/{{paymentId}}/succeed
+
+### Оплата не прошла
+POST {{Bank}}/sandbox/payments/{{paymentId}}/cancel?reason=card_expired
+
+### Возврат
+POST {{Bank}}/v1/refunds
+Authorization: Bearer {{ApiKey}}
+Idempotence-Key: refund-7d3e1b9a
+Content-Type: application/json
+
+{
+  "paymentId": "{{paymentId}}",
+  "amount": 12990.00
+}
