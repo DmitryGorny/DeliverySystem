@@ -1,5 +1,6 @@
 <Solution>
       <Project Path="Authorization/Authorization.csproj" />
      <Project Path="Catalog/Catalog.csproj" />
+     <Project Path="FakeBank/FakeBank.csproj" />
      <Project Path="Orders/Orders.csproj" />
 </Solution>
