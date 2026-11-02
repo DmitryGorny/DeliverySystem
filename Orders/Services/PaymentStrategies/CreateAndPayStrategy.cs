@@ -32,7 +32,8 @@ namespace Orders.Services.PaymentStrategies
                 {
                     OrderId = order.Id,
                     Amount = goods.Sum(s => s.Price * s.Quantity),
-                    Currency = CurrencyEnum.RUB
+                    Currency = CurrencyEnum.RUB,
+                    UserId = ownerId
                 }, ct);
 
             return new OrderCreatedResponse 
