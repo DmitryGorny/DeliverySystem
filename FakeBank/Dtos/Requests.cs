@@ -4,7 +4,9 @@ namespace FakeBank.Dtos
 {
     public record CreatePaymentRequest
     {
-        [Range(typeof(decimal), "0.01", "100000000")]
+        [Range(typeof(decimal), "0.01", "100000000",
+            ParseLimitsInInvariantCulture = true,
+            ConvertValueInInvariantCulture = true)]
         public decimal Amount { get; init; }
 
         [RegularExpression("^RUB$", ErrorMessage = "Only RUB is supported")]
