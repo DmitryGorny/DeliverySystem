@@ -3,4 +3,5 @@
      <Project Path="Catalog/Catalog.csproj" />
      <Project Path="FakeBank/FakeBank.csproj" />
      <Project Path="Orders/Orders.csproj" />
+	<Project Path="Payment/Payment.csproj" />
 </Solution>
