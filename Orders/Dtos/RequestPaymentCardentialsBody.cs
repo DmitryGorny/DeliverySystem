@@ -6,7 +6,8 @@ namespace Orders.Dtos
     {
         public Guid OrderId { get; set; }
         public decimal Amount { get; set; }
-        public CurrencyEnum Currency { get; set; }
+        public string Currency { get; set; }
+        public string Description { get; set; }
         public int UserId { get; set; }
     }
 }

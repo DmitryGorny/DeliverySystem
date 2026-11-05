@@ -28,11 +28,12 @@ namespace Orders.Services.PaymentStrategies
             await _ordersRepository.CreatePositions(goods, order.Id, ct);
 
             var cardentials = await _paymentRequester.GetPaymentCardentials(
-                new RequestPaymentCardentialsBody 
+                new RequestPaymentCardentialsBody
                 {
                     OrderId = order.Id,
                     Amount = goods.Sum(s => s.Price * s.Quantity),
-                    Currency = CurrencyEnum.RUB,
+                    Currency = CurrencyEnum.RUB.ToString(),
+                    Description = $"{order.Id} заказ",
                     UserId = ownerId
                 }, ct);
 
