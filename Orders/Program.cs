@@ -8,6 +8,7 @@ using Orders.Services.Auth.AuthHttpHandler;
 using Orders.Services.Auth.AuthRequester;
 using Orders.Services.Auth.Token;
 using Orders.Services.Catalog;
+using Orders.Services.ExceptionHandlers;
 using Orders.Services.Expiration;
 using Orders.Services.Order;
 using Orders.Services.PaymentStrategies;
@@ -35,6 +36,9 @@ builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
 builder.Services.AddTransient<AuthHttpHandler>();
 
+builder.Services.AddExceptionHandler<PaymentExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddHttpClient<ICatalogRequester, CatalogRequester>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["Services:Catalog"]!);
@@ -44,6 +48,12 @@ builder.Services.AddHttpClient<ICatalogRequester, CatalogRequester>(c =>
 builder.Services.AddHttpClient<IAuthRequester, AuthRequester>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["Services:Auth"]!);
+});
+
+builder.Services.AddHttpClient<IPaymentRequester, PaymentRequester>(c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["Services:Payment"]!);
+    c.Timeout = TimeSpan.FromSeconds(40);
 });
 
 builder.Services.AddEntityFrameworkNpgsql()
@@ -92,7 +102,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-;
+app.UseExceptionHandler();
 
 app.UseAuthorization();
 
