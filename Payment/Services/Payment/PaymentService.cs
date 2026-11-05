@@ -26,7 +26,7 @@ namespace Payment.Services.Payment
             return new CreatePaymentResponse
             {
                 PaymentId = createdPayment.Id,
-                Url = createdPayment.ConfirmationUrl,
+                ConfirmationUrl = createdPayment.ConfirmationUrl,
                 CreatedAt = createdPayment.CreatedAt,
                 Status = createdPayment.Status.ToString()
             };
