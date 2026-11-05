@@ -13,7 +13,7 @@ namespace Orders.Services.PaymentSystem
         }
         public async Task<PaymentSystemResponse> GetPaymentCardentials(RequestPaymentCardentialsBody paymentParameters, CancellationToken ct = default)
         {
-            using var response = await _http.PostAsJsonAsync("CreatePayment", paymentParameters, ct);
+            using var response = await _http.PostAsJsonAsync("api/Payment/CreatePayment", paymentParameters, ct);
 
             if (!response.IsSuccessStatusCode)
             {
